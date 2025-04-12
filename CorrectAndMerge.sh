@@ -27,33 +27,42 @@ firstrun="${runlist[0]}"
 for i in "${runlist[@]}"; do
     echo "Downloading RecoRun: $i"
     wget https://s3.cloud.infn.it/v1/AUTH_2ebf769785574195bde2ff418deac08a/cygno-analysis/RECO/${tag}/reco_run${i}_3D.root
-    
-    echo "Correcting RecoRun: $i"
 
-    cd map-correction
-    # Run the correction script
-    ./correct.exe ../reco_run${i}_3D.root maps/map-final.root ./reco_run${i}_3D_corrected.root
-
-    cd ..
-    root -l './RemoveRedpix.C("map-correction/reco_run'${i}'_3D_corrected.root", "map-correction/reco_run'${i}'_3D_corrected_no_redpix.root")'
-    rm "map-correction/reco_run${i}_3D_corrected.root"
-    mv "map-correction/reco_run${i}_3D_corrected_no_redpix.root" "map-correction/reco_run${i}_3D_corrected.root"
-    
-    cd map-correction
-    if [ $i -ne $firstrun ]; then
-        mv ./${outfilename}.root ./${outfilename}_tmp.root
-        hadd ./${outfilename}.root ./${outfilename}_tmp.root ./reco_run${i}_3D_corrected.root
-        rm ./${outfilename}_tmp.root
-        rm ./reco_run${i}_3D_corrected.root
+    # Check if the download was successful
+    if [ ! -f "./reco_run${i}_3D.root" ]; then
+        echo "Error downloading reco_run${i}_3D.root"
     else
-        mv ./reco_run${i}_3D_corrected.root ./${outfilename}.root
+    
+        echo "Correcting RecoRun: $i"
+
+        cd map-correction
+        # Run the correction script
+        ./correct.exe ../reco_run${i}_3D.root maps/map-final.root ./reco_run${i}_3D_corrected.root
+
+        cd ..
+        root -l './RemoveRedpix.C("map-correction/reco_run'${i}'_3D_corrected.root", "map-correction/reco_run'${i}'_3D_corrected_no_redpix.root")'
+        rm "map-correction/reco_run${i}_3D_corrected.root"
+        mv "map-correction/reco_run${i}_3D_corrected_no_redpix.root" "map-correction/reco_run${i}_3D_corrected.root"
+    
+        cd map-correction
+        if [ $i -ne $firstrun ]; then
+            mv ./${outfilename}.root ./${outfilename}_tmp.root
+            hadd ./${outfilename}.root ./${outfilename}_tmp.root ./reco_run${i}_3D_corrected.root
+            rm ./${outfilename}_tmp.root
+            rm ./reco_run${i}_3D_corrected.root
+        else
+            mv ./reco_run${i}_3D_corrected.root ./${outfilename}.root
+        fi
+
+        cd ..
+
+
+        echo "Removing RecoRun: $i"
+        rm ./reco_run${i}_3D.root
     fi
-
-    cd ..
-
-
-    echo "Removing RecoRun: $i"
-    rm ./reco_run${i}_3D.root
+    
 done
+
+
 
 mv ./map-correction/${outfilename}.root ./${outfilename}_corrected.root
