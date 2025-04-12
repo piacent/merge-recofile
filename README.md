@@ -2,6 +2,13 @@
 
 Code to hadd groups of recofiles and correct for map-corrections
 
+## Cloning this repo
+
+How to get this code:
+```
+git clone --recurse-submodules https://github.com/piacent/merge-recofile.git
+```
+
 ## Suggested use
 The code is still under development. If you find any bug or solution to a bug, or if you have suggestions for improvements, please, open an issue or fork and submit a pull-request.
 
