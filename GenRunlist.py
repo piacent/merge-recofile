@@ -17,8 +17,8 @@ def main(run_start, run_end, run_cathegory = 'data'):
     # Read the logbook
     dflog = cy.read_cygno_logbook(tag = "LNGS", start_run = run_start, end_run = run_end)
 
-    runlist = np.array([])
 
+    runlist = np.array([])
     for r in range(run_start, run_end+1):
         dfinfo = dflog[dflog["run_number"]==r].copy()
         if len(dfinfo) == 0:

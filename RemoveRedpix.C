@@ -1,7 +1,10 @@
-// root -l 'RemoveRedpix.C("reco_run59281_3D.root", "reco_run59281_3D_no_redpix.root")'
+// Author: Stefano Piacentini
+// Date: 2025-04-12
+// Usage: root -l 'RemoveRedpix.C("reco_run59281_3D.root", "reco_run59281_3D_no_redpix.root")'
 
 void RemoveRedpix(std::string filename, std::string outfilename) {
 
+    // Load the objects in the root file
     TFile oldfile(filename.c_str());
     TTree *oldtree;
     oldfile.GetObject("Events;1", oldtree);
@@ -28,7 +31,6 @@ void RemoveRedpix(std::string filename, std::string outfilename) {
     newfile.WriteObject(newtreepars, "Reco_params");
     newfile.WriteObject(newgitH, "gitHash");
     newfile.WriteObject(newtot_time, "total_time");
-
 
     // Exit from root
     gApplication->Terminate(0);
