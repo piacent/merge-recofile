@@ -33,7 +33,13 @@ for i in "${runlist[@]}"; do
     cd map-correction
     # Run the correction script
     ./correct.exe ../reco_run${i}_3D.root maps/map-final.root ./reco_run${i}_3D_corrected.root
+
+    cd ..
+    root -l './RemoveRedpix.C("map-correction/reco_run'${i}'_3D_corrected.root", "map-correction/reco_run'${i}'_3D_corrected_no_redpix.root")'
+    rm "map-correction/reco_run${i}_3D_corrected.root"
+    mv "map-correction/reco_run${i}_3D_corrected_no_redpix.root" "map-correction/reco_run${i}_3D_corrected.root"
     
+    cd map-correction
     if [ $i -ne $firstrun ]; then
         mv ./${outfilename}.root ./${outfilename}_tmp.root
         hadd ./${outfilename}.root ./${outfilename}_tmp.root ./reco_run${i}_3D_corrected.root
