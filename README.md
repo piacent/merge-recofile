@@ -3,6 +3,7 @@
 Code to hadd groups of recofiles and correct for map-corrections
 
 ## Suggested use
+The code is still under development. If you find any bug or solution to a bug, or if you have suggestions for improvements, please, open an issue or fork and submit a pull-request.
 
 ### First step: compilation of `map-correction` code
 Usage:
