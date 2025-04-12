@@ -1,0 +1,5 @@
+.vscode
+debug
+.DS_Store
+*.root
+runlist_*
